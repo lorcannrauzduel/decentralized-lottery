@@ -238,7 +238,7 @@ const App = () => {
 						<Button
 							variant="secondary"
 							onClick={handleGetWinner}
-							disabled={window.ethereum.selectedAddress.toLowerCase() !== owner.toLowerCase()}
+							disabled={window.ethereum.selectedAddress ? window.ethereum.selectedAddress.toLowerCase() !== owner.toLowerCase() : false}
 							style={{
 								marginLeft: '10px',
 							}}
