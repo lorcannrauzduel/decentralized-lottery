@@ -49,6 +49,7 @@ const App = () => {
 				value: ticketPrice,
 			});
 			await buyTicketResponse.wait();
+			toast.success('Ticket acheté !');
 		} catch (error: any) {
 			const reason = error.reason || error.message;
 			toast.error(reason);
@@ -64,6 +65,7 @@ const App = () => {
 				gasLimit: 300000,
 			});
 			await winner.wait();
+			toast.success('Tirage au sort effectué !');
 		} catch (error: any) {
 			console.log({ error });
 			const reason = error.reason || error.message;
@@ -80,6 +82,7 @@ const App = () => {
 				gasLimit: 300000,
 			});
 			await claimResponse.wait();
+			toast.success('Gains envoyés !');
 		} catch (error: any) {
 			const reason = error.reason || error.message;
 			toast.error(reason);
