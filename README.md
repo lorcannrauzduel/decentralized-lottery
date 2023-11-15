@@ -1,13 +1,6 @@
-# Sample Hardhat Project
+# Decentralized Lottery
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+DLottery est un système de loterie décentralisé implémenté en Solidity. Il utilise le VRF (Fonction Aléatoire Vérifiable) de Chainlink pour assurer une sélection équitable et transparente des gagnants de la loterie. Ce projet est construit sur Ethereum et est conçu pour être une démonstration simple mais efficace d'un système de loterie basé sur la blockchain.
 
-Try running some of the following tasks:
+Addresse du smart contract : [0x225FeBdD51cFb4FB472913F526d2e99f1C555a85](https://sepolia.etherscan.io/address/0x225FeBdD51cFb4FB472913F526d2e99f1C555a85)
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
