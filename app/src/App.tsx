@@ -131,7 +131,7 @@ const App = () => {
 	return (
 		<>
 			<StaticModal />
-			{winner && <Confetti width={width} height={height} />}
+			{winner && <Confetti width={width!} height={height!} />}
 			<Toaster />
 			<Navbar />
 			<Container>
@@ -143,7 +143,7 @@ const App = () => {
 							new Date().getTime() < endTime * 1000
 								? 'Vente de billet en cours'
 								: status === Status.NOT_STARTED &&
-								  new Date().getTime() > endTime * 1000
+								new Date().getTime() > endTime * 1000
 								? 'Vente de billet terminée'
 								: status === Status.STARTED
 								? 'Tirage au sort en cours'

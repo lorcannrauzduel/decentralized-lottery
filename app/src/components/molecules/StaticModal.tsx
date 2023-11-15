@@ -12,7 +12,6 @@ export const StaticModal = () => {
     setShow(false);
     localStorage.setItem('is18', 'true');
   }
-  const handleShow = () => setShow(true);
 
   return (
     <>
