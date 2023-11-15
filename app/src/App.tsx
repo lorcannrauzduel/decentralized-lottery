@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Navbar } from './components/templates/Navbar';
 import Button from 'react-bootstrap/Button';
-import { useAccount } from 'wagmi';
-import { useEffect, useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { CountdownTimer } from './components/atoms/CountdownTimer';
-import { getContract, getContractBalance } from './helpers/get-contract';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@uidotdev/usehooks';
 import Spinner from 'react-bootstrap/Spinner';
 import { StaticModal } from './components/molecules/StaticModal';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
-import { formatEther } from 'ethers';
+import { Status, useContract } from './hooks/useContract';
+import { useEffect } from 'react';
 
 declare global {
 	interface Window {
@@ -20,130 +18,39 @@ declare global {
 	}
 }
 
-enum Status {
-	NOT_STARTED,
-	STARTED,
-	ENDED,
-}
-
 const App = () => {
 	const { width, height } = useWindowSize();
-	const { address } = useAccount();
-	const [winner, setWinner] = useState('');
-	const [endTime, setEndTime] = useState(0);
-	const [status, setStatus] = useState(Status.NOT_STARTED);
-	const [participants, setParticipants] = useState(0);
-	const [priceInETH, setPriceInETH] = useState(0);
-	const [potentialGain, setPotentialGain] = useState(0);
-	const [isBuyTicketPending, setIsBuyTicketPending] = useState(false);
-	const [isGetWinnerPending, setIsGetWinnerPending] = useState(false);
-	const [isClaimPending, setIsClaimPending] = useState(false);
-	const [owner, setOwner] = useState('');
+	const {
+		winner,
+		status,
+		endTime,
+		participants,
+		potentialGain,
+		priceInETH,
+		handleBuyTicket,
+		handleClaim,
+		handleGetWinner,
+		owner,
+		isBuyTicketPending,
+		isClaimPending,
+		isGetWinnerPending,
+		isLoading,
+	} = useContract();
 
-	const handleBuyTicket = async () => {
-		setIsBuyTicketPending(true);
-		const contract = await getContract();
-		const ticketPrice = await contract.TICKET_PRICE();
-		try {
-			const buyTicketResponse = await contract.buyTicket(address, {
-				value: ticketPrice,
-			});
-			await buyTicketResponse.wait();
-			toast.success('Ticket acheté !');
-		} catch (error: any) {
-			const reason = error.reason || error.message;
-			toast.error(reason);
-		}
-		setIsBuyTicketPending(false);
-	};
-
-	const handleGetWinner = async () => {
-		setIsGetWinnerPending(true);
-		const contract = await getContract();
-		try {
-			const winner = await contract.roll({
-				gasLimit: 300000,
-			});
-			await winner.wait();
-			toast.success('Tirage au sort effectué !');
-		} catch (error: any) {
-			console.log({ error });
-			const reason = error.reason || error.message;
-			toast.error(reason);
-		}
-		setIsGetWinnerPending(false);
-	};
-
-	const handleClaim = async () => {
-		setIsClaimPending(true);
-		const contract = await getContract();
-		try {
-			const claimResponse = await contract.claim({
-				gasLimit: 300000,
-			});
-			await claimResponse.wait();
-			toast.success('Gains envoyés !');
-		} catch (error: any) {
-			const reason = error.reason || error.message;
-			toast.error(reason);
-		}
-		setIsClaimPending(false);
-	};
-
-	useEffect(() => {
-		(async () => {
-			window.ethereum.on('chainChanged', async (chainId: any) => {
-				// if different of sepolia
-				console.log({ chainId });
-				if (chainId !== '0xaa36a7') {
-					return await window.ethereum.request({
-						method: 'wallet_switchEthereumChain',
-						params: [{ chainId: '0xaa36a7' }],
-					});
-				}
-			});
-			if (!window.ethereum.selectedAddress) return;
-			const contract = await getContract();
-			const ownerAddress = await contract.owner();
-			setOwner(ownerAddress);
-			const nbParticipants = await contract.getParticipants();
-			setParticipants(Number(nbParticipants));
-			const priceInETH = await contract.TICKET_PRICE();
-			setPriceInETH(Number(formatEther(priceInETH)));
-			const balance = await getContractBalance();
-			setPotentialGain(Number(formatEther(balance)));
-			contract.on('RequestedRandomness', () => {
-				return setStatus(Status.STARTED);
-			});
-			contract.on('SelectedWinner', (address: any) => {
-				setWinner(address);
-				return setStatus(Status.ENDED);
-			});
-
-			const endTime = await contract.endTime();
-			setEndTime(Number(endTime));
-
-			const state = Number(await contract.currentState());
-			switch (state) {
-				case 0:
-					setStatus(Status.NOT_STARTED);
-					break;
-				case 1:
-					setStatus(Status.STARTED);
-					break;
-				case 2:
-					setWinner(await contract.winner());
-					setStatus(Status.ENDED);
-					break;
-				default:
-					break;
-			}
-		})();
-	}, []);
-
+	useEffect(() => {}, [status, isLoading]);
+	if (isLoading)
+		return (
+			<div
+				className="d-flex align-items-center justify-content-center"
+				style={{ height: '100vh' }}
+			>
+				<Spinner animation="border" role="status" />
+			</div>
+		);
 	return (
 		<>
 			<StaticModal />
+
 			{winner && <Confetti width={width!} height={height!} />}
 			<Toaster />
 			<Navbar />

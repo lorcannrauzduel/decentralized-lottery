@@ -1,0 +1,1 @@
+export const SEPOLIA_CHAIN_ID = '0xaa36a7';

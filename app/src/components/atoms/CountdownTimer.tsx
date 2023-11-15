@@ -16,7 +16,6 @@ export const CountdownTimer = ({ targetTimestamp }: any) => {
 				return;
 			}
 
-			// Calculer jours, heures, minutes et secondes
 			const days = Math.floor(difference / (1000 * 60 * 60 * 24));
 			const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
 			const minutes = Math.floor((difference / 1000 / 60) % 60);
@@ -35,11 +34,7 @@ export const CountdownTimer = ({ targetTimestamp }: any) => {
 	}, [targetTimestamp]);
 
 	return (
-		<div
-			style={{
-				marginLeft: '3px',
-			}}
-		>
+		<div>
 			{timeLeft}
 		</div>
 	);
