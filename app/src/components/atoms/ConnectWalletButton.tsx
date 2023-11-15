@@ -1,4 +1,3 @@
-import { format } from 'path';
 import Button from 'react-bootstrap/Button';
 import { useAccount, useConnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
