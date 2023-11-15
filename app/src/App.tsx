@@ -89,6 +89,16 @@ const App = () => {
 
 	useEffect(() => {
 		(async () => {
+			window.ethereum.on('chainChanged', async (chainId: any) => {
+				// if different of sepolia
+				console.log({ chainId });
+				if (chainId !== '0xaa36a7') {
+					return await window.ethereum.request({
+						method: 'wallet_switchEthereumChain',
+						params: [{ chainId: '0xaa36a7' }],
+					});
+				}
+			});
 			if (!window.ethereum.selectedAddress) return;
 			const contract = await getContract();
 			const ownerAddress = await contract.owner();
@@ -143,7 +153,7 @@ const App = () => {
 							new Date().getTime() < endTime * 1000
 								? 'Vente de billet en cours'
 								: status === Status.NOT_STARTED &&
-								new Date().getTime() > endTime * 1000
+								  new Date().getTime() > endTime * 1000
 								? 'Vente de billet terminée'
 								: status === Status.STARTED
 								? 'Tirage au sort en cours'
@@ -238,7 +248,12 @@ const App = () => {
 						<Button
 							variant="secondary"
 							onClick={handleGetWinner}
-							disabled={window.ethereum.selectedAddress ? window.ethereum.selectedAddress.toLowerCase() !== owner.toLowerCase() : true}
+							disabled={
+								window.ethereum.selectedAddress
+									? window.ethereum.selectedAddress.toLowerCase() !==
+									  owner.toLowerCase()
+									: true
+							}
 							style={{
 								marginLeft: '10px',
 							}}
