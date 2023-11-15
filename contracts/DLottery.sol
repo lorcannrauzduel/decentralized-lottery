@@ -35,7 +35,7 @@ contract DLottery is VRFConsumerBaseV2 {
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         owner = msg.sender;
         subscriptionId = _subscriptionId;
-        endTime = block.timestamp + 20 minutes;
+        endTime = block.timestamp + 2 days;
         currentState = State.NOT_STARTED;
     }
 

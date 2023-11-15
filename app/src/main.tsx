@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { WagmiConfig, createConfig, sepolia } from 'wagmi';
 import { createPublicClient, http } from 'viem';
 
+// Définition de la configuration de Wagmi
 const config = createConfig({
 	autoConnect: false,
 	publicClient: createPublicClient({

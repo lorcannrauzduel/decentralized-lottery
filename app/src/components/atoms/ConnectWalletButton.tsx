@@ -6,18 +6,18 @@ import { useEffect } from 'react';
 
 export const ConnectWalletButton = () => {
 	const { address, isConnected } = useAccount();
-	
-    const { connect, reset } = useConnect({
-        connector: new InjectedConnector(),
-      })
 
-	  useEffect(() => {
+	const { connect, reset } = useConnect({
+		connector: new InjectedConnector(),
+	});
+
+	useEffect(() => {
 		(async () => {
-			if(localStorage.getItem('is18') === 'true') {
-				await connect()
+			if (localStorage.getItem('is18') === 'true') {
+				await connect();
 			}
 		})();
-	  }, [])
+	}, []);
 
 	if (isConnected && address)
 		return (
