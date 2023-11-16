@@ -49,6 +49,7 @@ export const useContract = () => {
 				return setStatus(Status.STARTED);
 			});
 			contract.on('RequestedRandomnessFulfilled', (requestId, winner) => {
+				console.log(`Chainlink VRF Request ID : ${requestId}`);
 				setWinner(winner);
 				return setStatus(Status.ENDED);
 			});
