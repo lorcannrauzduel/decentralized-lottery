@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const subscriptionId = "6970";
+  const subscriptionId = "7042";
   const lottery = await ethers.deployContract("DLottery", [subscriptionId]);
   await lottery.waitForDeployment();
   const address = await lottery.getAddress();

@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
-import { getContract, getContractBalance } from '../helpers/get-contract';
+import {
+	getContract,
+} from '../helpers/get-contract';
 import { toast } from 'react-hot-toast';
 import { formatEther } from 'ethers';
 import { useAccount } from 'wagmi';
 import { SEPOLIA_CHAIN_ID } from '../constants/chain';
+import { decodeErrorResult } from 'viem';
+import { getContractBalance } from '../helpers/get-contract-balance';
+import { getABI } from '../helpers/get-abi';
 
 export enum Status {
 	NOT_STARTED,
@@ -43,8 +48,8 @@ export const useContract = () => {
 			contract.on('RequestedRandomness', () => {
 				return setStatus(Status.STARTED);
 			});
-			contract.on('SelectedWinner', (address: any) => {
-				setWinner(address);
+			contract.on('RequestedRandomnessFulfilled', (requestId, winner) => {
+				setWinner(winner);
 				return setStatus(Status.ENDED);
 			});
 		})();
@@ -76,7 +81,7 @@ export const useContract = () => {
 				setStatus(Status.STARTED);
 				break;
 			case 2:
-				setWinner((await contract.winner()));
+				setWinner(await contract.getWinner());
 				setStatus(Status.ENDED);
 				break;
 			default:
@@ -89,13 +94,18 @@ export const useContract = () => {
 		const contract = await getContract();
 		const ticketPrice = await contract.TICKET_PRICE();
 		try {
-			const buyTicketResponse = await contract.buyTicket(address, {
+			const tx = await contract.buyTicket(address, {
 				value: ticketPrice,
 			});
-			await buyTicketResponse.wait();
+			await tx.wait();
 			toast.success('Ticket acheté !');
 		} catch (error: any) {
-			const reason = error.reason || error.message;
+			const { errorName } = decodeErrorResult({
+				abi: getABI(),
+				data: error.data,
+			});
+
+			const reason = errorName || error.message;
 			toast.error(reason);
 		}
 		setIsBuyTicketPending(false);
@@ -105,14 +115,17 @@ export const useContract = () => {
 		setIsGetWinnerPending(true);
 		const contract = await getContract();
 		try {
-			const winner = await contract.roll({
-				gasLimit: 300000,
+			const tx = await contract.start({
+				gasLimit: 100000,
 			});
-			await winner.wait();
-			toast.success('Tirage au sort effectué !');
+			await tx.wait();
+			toast.success('Tirage au sort en cours !');
 		} catch (error: any) {
-			console.log({ error });
-			const reason = error.reason || error.message;
+			const { errorName } = decodeErrorResult({
+				abi: getABI(),
+				data: error.data,
+			});
+			const reason = errorName || error.message;
 			toast.error(reason);
 		}
 		setIsGetWinnerPending(false);
@@ -122,13 +135,18 @@ export const useContract = () => {
 		setIsClaimPending(true);
 		const contract = await getContract();
 		try {
-			const claimResponse = await contract.claim({
+			const tx = await contract.claim({
 				gasLimit: 300000,
 			});
-			await claimResponse.wait();
+			await tx.wait();
 			toast.success('Gains envoyés !');
 		} catch (error: any) {
-			const reason = error.reason || error.message;
+			const { errorName } = decodeErrorResult({
+				abi: getABI(),
+				data: error.data,
+			});
+
+			const reason = errorName || error.message;
 			toast.error(reason);
 		}
 		setIsClaimPending(false);

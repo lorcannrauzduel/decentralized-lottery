@@ -31,6 +31,9 @@ devDependencies:
   hardhat:
     specifier: ^2.19.0
     version: 2.19.0(ts-node@10.9.1)(typescript@5.2.2)
+  hardhat-storage-layout:
+    specifier: ^0.1.7
+    version: 0.1.7(hardhat@2.19.0)
 
 packages:
 
@@ -1703,6 +1706,12 @@ packages:
       typedarray: 0.0.6
     dev: true
 
+  /console-table-printer@2.11.2:
+    resolution: {integrity: sha512-uuUHie0sfPP542TKGzPFal0W1wo1beuKAqIZdaavcONx8OoqdnJRKjkinbRTOta4FaCa1RcIL+7mMJWX3pQGVg==}
+    dependencies:
+      simple-wcswidth: 1.0.1
+    dev: true
+
   /cookie@0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
     engines: {node: '>= 0.6'}
@@ -2410,6 +2419,15 @@ packages:
       - bufferutil
       - debug
       - utf-8-validate
+    dev: true
+
+  /hardhat-storage-layout@0.1.7(hardhat@2.19.0):
+    resolution: {integrity: sha512-q723g2iQnJpRdMC6Y8fbh/stG6MLHKNxa5jq/ohjtD5znOlOzQ6ojYuInY8V4o4WcPyG3ty4hzHYunLf66/1+A==}
+    peerDependencies:
+      hardhat: ^2.0.3
+    dependencies:
+      console-table-printer: 2.11.2
+      hardhat: 2.19.0(ts-node@10.9.1)(typescript@5.2.2)
     dev: true
 
   /hardhat@2.19.0(ts-node@10.9.1)(typescript@5.2.2):
@@ -3573,6 +3591,10 @@ packages:
       call-bind: 1.0.5
       get-intrinsic: 1.2.2
       object-inspect: 1.13.1
+    dev: true
+
+  /simple-wcswidth@1.0.1:
+    resolution: {integrity: sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg==}
     dev: true
 
   /slash@3.0.0:

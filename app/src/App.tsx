@@ -83,7 +83,6 @@ const App = () => {
 						<Card.Subtitle className="mb-2 text-muted">
 							<strong>Gain potentiel:</strong> {potentialGain} ETH
 						</Card.Subtitle>
-						{/* <C */}
 						<Card.Text>
 							{status === Status.NOT_STARTED &&
 								new Date().getTime() < endTime * 1000 && (
@@ -134,7 +133,7 @@ const App = () => {
 									aria-hidden="true"
 								/>
 							)}
-							Acheter un ticket
+							{' '}Acheter un ticket
 						</Button>
 						<Button
 							variant="secondary"
@@ -153,7 +152,7 @@ const App = () => {
 									aria-hidden="true"
 								/>
 							)}
-							Obtenir les gains
+							{' '}Obtenir les gains
 						</Button>
 						<Button
 							variant="secondary"
@@ -177,7 +176,7 @@ const App = () => {
 									aria-hidden="true"
 								/>
 							)}
-							Lancer le tirage au sort
+							{' '}Lancer le tirage au sort
 						</Button>
 					</Card.Body>
 				</Card>
